@@ -1,0 +1,124 @@
+{% extends "base.html" %}
+
+{% block content %}
+<section class="auth-page">
+
+    <div class="auth-left">
+        <div class="logo-box">
+            <div class="logo-icon">C</div>
+            <div>
+                <h2>CHILILI Clicks</h2>
+                <p>Smart bills. Fast payments.</p>
+            </div>
+        </div>
+
+        <span class="pill">⚡ Bills Payment Platform</span>
+
+        <div class="hero-content">
+            <h1>One Wallet.<br>Every Payment.<br><span>Zero Stress.</span></h1>
+            <p>
+                CHILILI Clicks is a simulated fintech bills payment platform built to make
+                everyday transactions faster and easier. Users can buy airtime, subscribe data,
+                pay electricity bills, renew TV subscriptions, track transactions, and manage
+                wallet funding from one secure dashboard.
+            </p>
+        </div>
+
+        <div class="service-grid">
+            <div class="service-card">📱<h4>Airtime</h4><p>Top up instantly</p></div>
+            <div class="service-card">📶<h4>Data</h4><p>Stay connected</p></div>
+            <div class="service-card">⚡<h4>Electricity</h4><p>Pay bills easily</p></div>
+            <div class="service-card">📺<h4>TV Bills</h4><p>Renew quickly</p></div>
+        </div>
+
+        <div class="wallet-box">
+            <div>
+                <p>Wallet Balance</p>
+                <h3>₦0.00</h3>
+                <small>Your wallet is ready to fund.</small>
+            </div>
+            <span>● Demo Mode</span>
+        </div>
+
+        <div class="trust-row">
+            <span>🛡 Secure System</span>
+            <span>🔒 Protected Data</span>
+            <span>✅ Reliable Service</span>
+        </div>
+    </div>
+
+    <div class="auth-right">
+        <div class="auth-card">
+
+            <div class="secure-badge">🔒 Secure Registration</div>
+
+            <h1>Create Your Account</h1>
+            <p class="subtitle">
+                Create your CHILILI wallet account and start managing your bills smarter.
+            </p>
+
+            <form method="POST">
+                <div class="input-box">
+                    <span>👤</span>
+                    <div>
+                        <label>Full Name</label>
+                        <input type="text" name="full_name" placeholder="Enter your full name" required>
+                    </div>
+                </div>
+
+                <div class="input-box">
+                    <span>✉️</span>
+                    <div>
+                        <label>Email Address</label>
+                        <input type="email" name="email" placeholder="example@email.com" required>
+                    </div>
+                </div>
+
+                <div class="input-box">
+                    <span>📞</span>
+                    <div>
+                        <label>Phone Number</label>
+                        <input type="text" name="phone" placeholder="08012345678" required>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="input-box">
+                        <span>🔐</span>
+                        <div>
+                            <label>Password</label>
+                            <input type="password" name="password" placeholder="Create password" required>
+                        </div>
+                    </div>
+
+                    <div class="input-box">
+                        <span>🔐</span>
+                        <div>
+                            <label>Confirm Password</label>
+                            <input type="password" name="confirm_password" placeholder="Confirm password" required>
+                        </div>
+                    </div>
+                </div>
+
+                <label class="robot-check">
+                    <input type="checkbox" name="not_robot" required>
+                    <span>I am not a robot</span>
+                </label>
+
+                <div class="security-note">
+                    🛡 <strong>Your security is our priority.</strong><br>
+                    <small>This academic demo uses protected account handling and password hashing.</small>
+                </div>
+
+                <button type="submit" class="btn-primary">Create Wallet Account →</button>
+            </form>
+
+            <p class="auth-link">
+                Already have an account?
+                <a href="{{ url_for('login') }}">Login instead</a>
+            </p>
+        </div>
+    </div>
+
+</section>
+{% endblock %}

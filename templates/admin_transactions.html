@@ -1,0 +1,201 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<section class="dashboard-page">
+
+    <aside class="sidebar">
+
+        <div>
+
+            <div class="side-logo">
+                <div class="logo-icon">A</div>
+                <div>
+                    <h2>ADMIN</h2>
+                    <p>Transaction Center</p>
+                </div>
+            </div>
+
+            <nav class="side-menu">
+                <a href="{{ url_for('admin_dashboard') }}">🏠 Dashboard</a>
+                <a href="{{ url_for('admin_funding') }}">💳 Funding Requests</a>
+                <a class="active" href="{{ url_for('admin_transactions') }}">📜 Transactions</a>
+                <a href="{{ url_for('logout') }}">🚪 Logout</a>
+            </nav>
+
+        </div>
+
+    </aside>
+
+    <main class="dashboard-main">
+
+        <div class="topbar">
+
+            <div>
+                <h1>All Transactions</h1>
+                <p>Monitor every transaction performed in the system.</p>
+            </div>
+
+            <div class="profile-pill">
+                <span>👤</span>
+                <div>
+                    <strong>{{ user.full_name }}</strong>
+                    <small>Administrator</small>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="panel-header">
+
+    <div>
+        <h3>Transaction Records</h3>
+        <p>Monitor every transaction in the system.</p>
+    </div>
+
+    <a href="{{ url_for('export_transactions') }}"
+       class="export-btn">
+        📥 Export CSV
+    </a>
+
+</div>
+
+            <h2>Transaction Records</h2>
+
+            <form method="GET" style="margin:20px 0;display:flex;gap:10px;flex-wrap:wrap;">
+
+                <input
+                    type="text"
+                    name="search"
+                    value="{{ search }}"
+                    placeholder="Search..."
+                    class="form-control">
+
+                <select name="service" class="form-control">
+
+                    <option value="">All Services</option>
+
+                    <option value="Airtime Purchase"
+                        {% if service=="Airtime Purchase" %}selected{% endif %}>
+                        Airtime
+                    </option>
+
+                    <option value="Data Purchase"
+                        {% if service=="Data Purchase" %}selected{% endif %}>
+                        Data
+                    </option>
+
+                    <option value="Electricity Payment"
+                        {% if service=="Electricity Payment" %}selected{% endif %}>
+                        Electricity
+                    </option>
+
+                    <option value="TV Subscription"
+                        {% if service=="TV Subscription" %}selected{% endif %}>
+                        TV
+                    </option>
+
+                    <option value="Wallet Funding"
+                        {% if service=="Wallet Funding" %}selected{% endif %}>
+                        Wallet Funding
+                    </option>
+
+                </select>
+
+                <select name="status" class="form-control">
+
+                    <option value="">All Status</option>
+
+                    <option value="successful"
+                        {% if status=="successful" %}selected{% endif %}>
+                        Successful
+                    </option>
+
+                    <option value="pending"
+                        {% if status=="pending" %}selected{% endif %}>
+                        Pending
+                    </option>
+
+                    <option value="failed"
+                        {% if status=="failed" %}selected{% endif %}>
+                        Failed
+                    </option>
+
+                </select>
+
+                <button class="btn-primary">
+                    Search
+                </button>
+
+            </form>
+
+            {% if transactions.items %}
+
+            <table class="transaction-table">
+
+                <thead>
+
+                    <tr>
+                        <th>Reference</th>
+                        <th>User</th>
+                        <th>Service</th>
+                        <th>Provider</th>
+                        <th>Amount</th>
+                        <th>Status</th>
+                        <th>Date</th>
+                        <th>Receipt</th>
+                    </tr>
+
+                </thead>
+
+                <tbody>
+
+                {% for txn in transactions.items %}
+
+                    <tr>
+
+                        <td>{{ txn.reference }}</td>
+
+                        <td>{{ txn.user.full_name }}</td>
+
+                        <td>{{ txn.service_type }}</td>
+
+                        <td>{{ txn.provider }}</td>
+
+                        <td>₦{{ "%.2f"|format(txn.amount) }}</td>
+
+                        <td>{{ txn.status }}</td>
+
+                        <td>{{ txn.created_at.strftime("%Y-%m-%d %H:%M") }}</td>
+
+                        <td>
+                            <a href="{{ url_for('receipt', transaction_id=txn.id) }}"
+                               class="btn-primary"
+                               style="padding:6px 12px;text-decoration:none;">
+                                View
+                            </a>
+                        </td>
+
+                    </tr>
+
+                {% endfor %}
+
+                </tbody>
+
+            </table>
+
+            {% else %}
+
+                <p class="empty-state">
+                    No transactions found.
+                </p>
+
+            {% endif %}
+
+        </div>
+
+    </main>
+
+</section>
+
+{% endblock %}

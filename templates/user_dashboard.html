@@ -1,0 +1,387 @@
+{% extends "base.html" %}
+
+{% block content %}
+<section class="dashboard-page fintech-dashboard">
+
+    <aside class="fin-sidebar">
+        <div>
+            <div class="fin-logo-row">
+                <div class="fin-logo-icon">C</div>
+                <div>
+                    <h2>CHILILI</h2>
+                    <p>Clicks Wallet</p>
+                </div>
+            </div>
+
+            <nav class="fin-menu">
+                <a class="active" href="{{ url_for('dashboard') }}">🏠 <span>Dashboard</span></a>
+                <a href="{{ url_for('buy_airtime') }}">📱 <span>Airtime</span></a>
+                <a href="{{ url_for('buy_data') }}">📶 <span>Data</span></a>
+                <a href="{{ url_for('pay_electricity') }}">⚡ <span>Electricity</span></a>
+                <a href="{{ url_for('pay_tv') }}">📺 <span>TV Bills</span></a>
+                <a href="{{ url_for('fund_wallet') }}">💳 <span>Fund Wallet</span></a>
+                <a href="{{ url_for('transactions') }}">📜 <span>Transactions</span></a>
+                <a href="{{ url_for('notifications') }}">🔔 <span>Notifications</span></a>
+                <a href="{{ url_for('profile') }}">👤 <span>My Account</span></a>
+            </nav>
+        </div>
+
+        <div class="fin-premium-card">
+            <div class="premium-icon">👑</div>
+            <h3>Go Premium</h3>
+            <p>Unlock smarter wallet insights, faster support and business-ready reports.</p>
+            <a href="#">Upgrade Now</a>
+        </div>
+
+        <a class="fin-logout" href="{{ url_for('logout') }}">🚪 <span>Logout</span></a>
+    </aside>
+
+    <main class="fin-main">
+
+        <header class="fin-topbar premium-header">
+            <div class="header-left">
+                <span class="page-kicker">Live fintech dashboard</span>
+                <h1>Welcome back, {{ user.full_name }} 👋</h1>
+                <p>Monitor wallet balance, service usage, transactions and AI wallet insights.</p>
+            </div>
+
+            <div class="header-center">
+                <div class="dashboard-search">
+                    <span>🔎</span>
+                    <input type="text" placeholder="Search transactions, bills, receipts...">
+                </div>
+            </div>
+
+            <div class="fin-user-actions">
+                <a href="{{ url_for('notifications') }}" class="notification-bell premium-bell">
+                    🔔
+                    <span>{{ unread_count }}</span>
+                </a>
+
+                <div class="fin-profile-chip premium-profile">
+                    <div class="avatar-dot">👤</div>
+                    <div>
+                        <strong>{{ user.full_name }}</strong>
+                        <small>{{ user.email }}</small>
+                    </div>
+                    <span class="profile-arrow">⌄</span>
+                </div>
+            </div>
+        </header>
+
+        <section class="fin-metrics-row">
+
+            <div class="fin-wallet-card">
+                <div class="wallet-card-head">
+                    <div>
+                        <p>Total Wallet Balance</p>
+                        <h2>₦{{ "%.2f"|format(user.wallet_balance) }}</h2>
+                    </div>
+                    <div class="wallet-mini-icon">💳</div>
+                </div>
+
+                <div class="wallet-status-row">
+                    <span class="wallet-state">● Active Wallet</span>
+                    <span class="wallet-mode">Demo Mode</span>
+                </div>
+
+                <div class="wallet-buttons">
+                    <a href="{{ url_for('fund_wallet') }}">Fund Wallet</a>
+                    <a href="{{ url_for('transactions') }}">View History</a>
+                </div>
+            </div>
+
+            <div class="fin-stat-card success">
+                <div class="stat-icon">✅</div>
+                <p>Successful Payments</p>
+                <h3>{{ successful_payments }}</h3>
+                <small>Completed payments</small>
+                <div class="mini-sparkline green-line"></div>
+            </div>
+
+            <div class="fin-stat-card pending">
+                <div class="stat-icon">⏳</div>
+                <p>Pending Transactions</p>
+                <h3>{{ pending_transactions }}</h3>
+                <small>Awaiting approval</small>
+                <div class="mini-sparkline amber-line"></div>
+            </div>
+
+            <div class="fin-stat-card failed">
+                <div class="stat-icon">❌</div>
+                <p>Failed Transactions</p>
+                <h3>{{ failed_transactions }}</h3>
+                <small>Unsuccessful records</small>
+                <div class="mini-sparkline red-line"></div>
+            </div>
+
+            <div class="fin-stat-card spent">
+                <div class="stat-icon">📈</div>
+                <p>Total Amount Spent</p>
+                <h3>₦{{ "%.2f"|format(total_amount_spent) }}</h3>
+                <small>All-time spending</small>
+                <div class="mini-sparkline blue-line"></div>
+            </div>
+
+        </section>
+
+        <section class="fin-content-grid">
+
+            <div class="fin-left-column">
+
+                <div class="fin-panel analytics-center-pro">
+                    <div class="panel-header analytics-header-pro">
+                        <div>
+                            <span class="analytics-kicker">Financial Analytics Center</span>
+                            <h3>Service Usage Overview</h3>
+                            <p>Smart breakdown of wallet funding, bill payments and service activity.</p>
+                        </div>
+
+                        <button class="month-filter">📅 This Month ▾</button>
+                    </div>
+
+                    <div class="analytics-top-grid">
+
+                        <div class="analytics-chart-card">
+                            <div class="service-chart-box advanced-chart-box">
+                                <canvas
+                                    id="serviceChart"
+                                    data-labels='{{ chart_labels|tojson }}'
+                                    data-values='{{ chart_values|tojson }}'>
+                                </canvas>
+
+                                <div class="chart-center-label pro-center-label">
+                                    <small>Total</small>
+                                    <strong>{{ successful_payments }}</strong>
+                                    <span>completed</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="analytics-insight-card">
+                            <span class="insight-badge">AI Insight</span>
+                            <h4>Wallet activity looks healthy.</h4>
+                            <p>
+                                You currently have {{ successful_payments }} completed transaction(s),
+                                {{ pending_transactions }} pending and {{ failed_transactions }} failed.
+                            </p>
+
+                            <div class="insight-mini-grid">
+                                <div>
+                                    <small>Completion Rate</small>
+                                    <strong>
+                                        {% if total_transactions > 0 %}
+                                            {{ ((successful_payments / total_transactions) * 100)|round(1) }}%
+                                        {% else %}
+                                            0%
+                                        {% endif %}
+                                    </strong>
+                                </div>
+
+                                <div>
+                                    <small>Total Spending</small>
+                                    <strong>₦{{ "%.2f"|format(total_amount_spent) }}</strong>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <div class="analytics-progress-list">
+                        {% for label in chart_labels %}
+                        <div class="analytics-progress-row">
+                            <div class="analytics-progress-head">
+                                <div>
+                                    <span class="service-icon">
+                                        {% if label == "Wallet Funding" %}💳
+                                        {% elif label == "Airtime Purchase" %}📱
+                                        {% elif label == "Data Purchase" %}📶
+                                        {% elif label == "Electricity Payment" %}⚡
+                                        {% elif label == "TV Subscription" %}📺
+                                        {% else %}📊
+                                        {% endif %}
+                                    </span>
+                                    <strong>{{ label }}</strong>
+                                </div>
+
+                                <span>
+                                    {% if successful_payments > 0 %}
+                                        {{ ((chart_values[loop.index0] / successful_payments) * 100)|round(1) }}%
+                                    {% else %}
+                                        0%
+                                    {% endif %}
+                                </span>
+                            </div>
+
+                            <div class="analytics-progress-track">
+                                <div
+                                    class="analytics-progress-fill"
+                                    data-value="{% if successful_payments > 0 %}{{ ((chart_values[loop.index0] / successful_payments) * 100)|round(1) }}{% else %}0{% endif %}">
+                                </div>
+                            </div>
+
+                            <small>{{ chart_values[loop.index0] }} completed transaction(s)</small>
+                        </div>
+                        {% endfor %}
+                    </div>
+
+                    <div class="analytics-bottom-grid">
+                        <div>
+                            <span>Today's Revenue</span>
+                            <strong>₦{{ "%.2f"|format(total_amount_spent) }}</strong>
+                        </div>
+
+                        <div>
+                            <span>Most Used</span>
+                            <strong>
+                                {% if chart_labels %}
+                                    {{ chart_labels[0] }}
+                                {% else %}
+                                    None
+                                {% endif %}
+                            </strong>
+                        </div>
+
+                        <div>
+                            <span>Average Transaction</span>
+                            <strong>
+                                {% if successful_payments > 0 %}
+                                    ₦{{ "%.2f"|format(total_amount_spent / successful_payments) }}
+                                {% else %}
+                                    ₦0.00
+                                {% endif %}
+                            </strong>
+                        </div>
+
+                        <div>
+                            <span>Completion Rate</span>
+                            <strong>
+                                {% if total_transactions > 0 %}
+                                    {{ ((successful_payments / total_transactions) * 100)|round(1) }}%
+                                {% else %}
+                                    0%
+                                {% endif %}
+                            </strong>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="fin-panel recent-panel">
+                    <div class="panel-header">
+                        <div>
+                            <h3>Recent Transactions</h3>
+                            <p>Your latest wallet and bill payment records.</p>
+                        </div>
+                        <a href="{{ url_for('transactions') }}">View all</a>
+                    </div>
+
+                    <div class="transaction-table-pro">
+                        <div class="tx-head">
+                            <span>Service</span>
+                            <span>Amount</span>
+                            <span>Status</span>
+                            <span>Date & Time</span>
+                            <span>Ref</span>
+                        </div>
+
+                        {% if recent_transactions %}
+                            {% for txn in recent_transactions %}
+                            <div class="tx-row">
+                                <div class="tx-service">
+                                    <span>
+                                        {% if txn.service_type == "Airtime Purchase" %}📱
+                                        {% elif txn.service_type == "Data Purchase" %}📶
+                                        {% elif txn.service_type == "Electricity Payment" %}⚡
+                                        {% elif txn.service_type == "TV Subscription" %}📺
+                                        {% elif txn.service_type == "Wallet Funding" %}💳
+                                        {% else %}📜
+                                        {% endif %}
+                                    </span>
+                                    <div>
+                                        <strong>{{ txn.service_type }}</strong>
+                                        <small>{{ txn.provider }}</small>
+                                    </div>
+                                </div>
+
+                                <strong>₦{{ "%.2f"|format(txn.amount) }}</strong>
+                                <span class="tx-status">{{ txn.status }}</span>
+                                <small>{{ txn.created_at.strftime("%b %d, %Y %I:%M %p") }}</small>
+                                <small>{{ txn.reference }}</small>
+                            </div>
+                            {% endfor %}
+                        {% else %}
+                            <p class="empty-state">No transaction yet.</p>
+                        {% endif %}
+                    </div>
+                </div>
+
+            </div>
+
+            <aside class="fin-right-column">
+
+                <div class="assistant-card" id="aiPanel">
+                    <div class="assistant-card-header">
+                        <div class="assistant-profile">
+                            <div class="assistant-avatar">👩🏽‍💼</div>
+                            <div>
+                                <h3>CHILILI Assistant</h3>
+                                <p>● Online</p>
+                            </div>
+                        </div>
+                        <button id="aiClose">×</button>
+                    </div>
+
+                    <div class="assistant-hero">
+                        <div class="assistant-face">👩🏽‍💼</div>
+                        <div class="assistant-bubble">
+                            <strong>Hello {{ user.full_name }}! 👋</strong>
+                            <p>
+                                I’m your CHILILI financial assistant. I can help with wallet,
+                                bills, receipts and transactions.
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="assistant-actions">
+                        <button data-question="What is my wallet balance?">💳 Balance</button>
+                        <button data-question="How do I fund my wallet?">💼 Fund Wallet</button>
+                        <button data-question="Show my recent transactions">📜 Transactions</button>
+                        <button data-question="How do I buy airtime?">📱 Airtime</button>
+                        <button data-question="How do I buy data?">📶 Data</button>
+                        <button data-question="How do I pay electricity?">⚡ Electricity</button>
+                    </div>
+
+                    <div class="ai-assistant-messages" id="aiMessages">
+                        <div class="ai-message bot">
+                            Ask me anything about wallet funding, transactions, receipts,
+                            airtime, data, electricity or TV payments.
+                        </div>
+                    </div>
+
+                    <form class="assistant-input-row" id="aiForm">
+                        <input id="aiInput" type="text" placeholder="Type your message..." autocomplete="off">
+                        <button type="submit">➤</button>
+                    </form>
+                </div>
+
+                <button class="assistant-floating-human" id="aiToggle">
+                    <span>👩🏽‍💼</span>
+                    <div>
+                        <strong>Hi! I’m CHILILI 👋</strong>
+                        <small>Need help with anything?</small>
+                    </div>
+                </button>
+
+            </aside>
+
+        </section>
+
+    </main>
+
+</section>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="{{ url_for('static', filename='js/dashboard_charts.js') }}"></script>
+<script src="{{ url_for('static', filename='js/ai_assistant.js') }}"></script>
+<script src="{{ url_for('static', filename='js/analytics_center.js') }}"></script>
+{% endblock %}

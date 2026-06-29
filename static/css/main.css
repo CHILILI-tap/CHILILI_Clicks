@@ -1,0 +1,53 @@
+:root {
+    --green-950: #021008;
+    --green-900: #03140c;
+    --green-800: #052e1b;
+    --green-700: #065f32;
+    --green-600: #15803d;
+    --green-500: #22c55e;
+    --green-300: #86efac;
+    --green-100: #dcfce7;
+
+    --white: #ffffff;
+    --soft-white: #f9fafb;
+    --gray-100: #f3f4f6;
+    --gray-300: #d1d5db;
+    --gray-500: #6b7280;
+    --gray-800: #1f2937;
+
+    --shadow-soft: 0 20px 60px rgba(0,0,0,0.22);
+    --shadow-strong: 0 35px 95px rgba(0,0,0,0.42);
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: "Segoe UI", Arial, sans-serif;
+    background: var(--green-950);
+    color: var(--gray-800);
+    overflow-x: hidden;
+}
+
+a {
+    color: inherit;
+}
+
+.flash-area {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    z-index: 999;
+}
+
+.alert {
+    background: var(--green-100);
+    color: var(--green-700);
+    padding: 14px 18px;
+    border-radius: 14px;
+    font-weight: 900;
+    box-shadow: var(--shadow-soft);
+}

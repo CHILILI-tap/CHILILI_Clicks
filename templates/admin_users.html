@@ -1,0 +1,92 @@
+{% extends "base.html" %}
+
+{% block content %}
+<section class="dashboard-page fintech-dashboard">
+
+    <aside class="fin-sidebar">
+        <div>
+            <div class="fin-logo-row">
+                <div class="fin-logo-icon">A</div>
+                <div>
+                    <h2>ADMIN</h2>
+                    <p>User Management</p>
+                </div>
+            </div>
+
+            <nav class="fin-menu">
+                <a href="{{ url_for('admin_dashboard') }}">🏠 <span>Dashboard</span></a>
+                <a href="{{ url_for('admin_funding') }}">💳 <span>Funding Requests</span></a>
+                <a href="{{ url_for('admin_transactions') }}">📜 <span>Transactions</span></a>
+                <a class="active" href="{{ url_for('admin_users') }}">👥 <span>Users</span></a>
+            </nav>
+        </div>
+
+        <a class="fin-logout" href="{{ url_for('logout') }}">🚪 <span>Logout</span></a>
+    </aside>
+
+    <main class="fin-main">
+
+        <header class="fin-topbar premium-header">
+            <div class="header-left">
+                <span class="page-kicker">Admin User Control</span>
+                <h1>User Management 👥</h1>
+                <p>View registered users, wallet balances, roles and account information.</p>
+            </div>
+        </header>
+
+        <section class="fin-panel transaction-page-card">
+            <div class="panel-header">
+                <div>
+                    <h3>All Users</h3>
+                    <p>Search and review all CHILILI Clicks user accounts.</p>
+                </div>
+                <span class="service-page-icon">👥</span>
+            </div>
+
+            <form method="GET" action="{{ url_for('admin_users') }}" class="transaction-filter-form">
+                <div class="filter-input">
+                    <label>Search User</label>
+                    <input
+                        type="text"
+                        name="search"
+                        value="{{ search }}"
+                        placeholder="Name, email, phone, role...">
+                </div>
+
+                <div class="filter-buttons">
+                    <button type="submit">Search</button>
+                    <a href="{{ url_for('admin_users') }}">Reset</a>
+                </div>
+            </form>
+
+            {% if users %}
+            <div class="transaction-table-modern">
+                <div class="transaction-head admin-user-head">
+                    <span>Name</span>
+                    <span>Email</span>
+                    <span>Phone</span>
+                    <span>Wallet</span>
+                    <span>Role</span>
+                    <span>Date Joined</span>
+                </div>
+
+                {% for account in users %}
+                <div class="transaction-row-modern admin-user-row">
+                    <strong>{{ account.full_name }}</strong>
+                    <span>{{ account.email }}</span>
+                    <span>{{ account.phone }}</span>
+                    <strong>₦{{ "%.2f"|format(account.wallet_balance) }}</strong>
+                    <span class="tx-status">{{ account.role }}</span>
+                    <span>{{ account.created_at.strftime("%Y-%m-%d") }}</span>
+                </div>
+                {% endfor %}
+            </div>
+            {% else %}
+                <p class="empty-state">No users found.</p>
+            {% endif %}
+        </section>
+
+    </main>
+
+</section>
+{% endblock %}

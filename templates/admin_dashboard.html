@@ -1,0 +1,258 @@
+{% extends "base.html" %}
+
+{% block content %}
+<section class="dashboard-page fintech-dashboard">
+
+    <aside class="fin-sidebar">
+        <div>
+            <div class="fin-logo-row">
+                <div class="fin-logo-icon">A</div>
+                <div>
+                    <h2>ADMIN</h2>
+                    <p>CHILILI Control</p>
+                </div>
+            </div>
+
+            <nav class="fin-menu">
+                <a class="active" href="{{ url_for('admin_dashboard') }}">🏠 <span>Admin Dashboard</span></a>
+                <a href="{{ url_for('admin_funding') }}">💳 <span>Funding Requests</span></a>
+                <a href="{{ url_for('admin_transactions') }}">📜 <span>Transactions</span></a>
+                <a href="{{ url_for('admin_users') }}">👥 <span>Users</span></a>
+                <a href="{{ url_for('dashboard') }}">👤 <span>User Dashboard</span></a>
+            </nav>
+        </div>
+
+        <a class="fin-logout" href="{{ url_for('logout') }}">🚪 <span>Logout</span></a>
+    </aside>
+
+    <main class="fin-main">
+
+        <header class="fin-topbar premium-header">
+            <div class="header-left">
+                <span class="page-kicker">Admin Analytics Center</span>
+                <h1>Admin Dashboard 🛡️</h1>
+                <p>Monitor users, wallet funding, transactions, and system performance.</p>
+            </div>
+
+            <div class="fin-user-actions">
+                <a href="{{ url_for('notifications') }}" class="notification-bell">
+    🔔
+    <span>{{ unread_count }}</span>
+</a>
+                <div class="fin-profile-chip premium-profile">
+                    <div class="avatar-dot">🛡️</div>
+                    <div>
+                        <strong>Administrator</strong>
+                        <small>CHILILI Control</small>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <section class="fin-metrics-row admin-metrics-row">
+            <div class="fin-wallet-card admin-hero-card">
+                <div class="wallet-card-head">
+                    <div>
+                        <p>Total Wallet Balance</p>
+                        <h2>₦{{ "%.2f"|format(total_wallet_balance) }}</h2>
+                    </div>
+                    <div class="wallet-mini-icon">🏦</div>
+                </div>
+
+                <div class="wallet-status-row">
+                    <span class="wallet-state">● System Online</span>
+                    <span class="wallet-mode">Admin Mode</span>
+                </div>
+
+                <div class="wallet-buttons">
+                    <a href="{{ url_for('admin_funding') }}">Review Funding</a>
+                    <a href="{{ url_for('admin_transactions') }}">Transactions</a>
+                </div>
+            </div>
+
+            <div class="fin-stat-card success">
+                <div class="stat-icon">👥</div>
+                <p>Total Users</p>
+                <h3>{{ total_users }}</h3>
+                <small>Registered accounts</small>
+                <div class="mini-sparkline green-line"></div>
+            </div>
+
+            <div class="fin-stat-card pending">
+                <div class="stat-icon">⏳</div>
+                <p>Pending Funding</p>
+                <h3>{{ pending_count }}</h3>
+                <small>Awaiting approval</small>
+                <div class="mini-sparkline amber-line"></div>
+            </div>
+
+            <div class="fin-stat-card spent">
+                <div class="stat-icon">💰</div>
+                <p>Approved Funding</p>
+                <h3>₦{{ "%.2f"|format(total_approved_funding) }}</h3>
+                <small>Total approved amount</small>
+                <div class="mini-sparkline blue-line"></div>
+            </div>
+        </section>
+
+        <section class="admin-analytics-grid">
+
+            <div class="fin-panel">
+                <div class="panel-header">
+                    <div>
+                        <h3>Funding Status Chart</h3>
+                        <p>Pending, approved and rejected wallet funding requests.</p>
+                    </div>
+                    <span class="service-page-icon">💳</span>
+                </div>
+
+                <div class="admin-chart-box">
+                    <canvas
+                        id="fundingChart"
+                        data-labels='{{ funding_chart_labels|tojson }}'
+                        data-values='{{ funding_chart_values|tojson }}'>
+                    </canvas>
+                </div>
+            </div>
+
+            <div class="fin-panel">
+                <div class="panel-header">
+                    <div>
+                        <h3>Transaction Status Chart</h3>
+                        <p>Successful, pending and failed transaction records.</p>
+                    </div>
+                    <span class="service-page-icon">📊</span>
+                </div>
+
+                <div class="admin-chart-box">
+                    <canvas
+                        id="transactionStatusChart"
+                        data-labels='{{ transaction_chart_labels|tojson }}'
+                        data-values='{{ transaction_chart_values|tojson }}'>
+                    </canvas>
+                </div>
+            </div>
+
+            <div class="fin-panel admin-wide-chart">
+                <div class="panel-header">
+                    <div>
+                        <h3>Service Usage Analytics</h3>
+                        <p>Breakdown of wallet funding and bill payment services.</p>
+                    </div>
+                    <span class="service-page-icon">📈</span>
+                </div>
+
+                <div class="admin-chart-box wide">
+                    <canvas
+                        id="serviceUsageChart"
+                        data-labels='{{ service_labels|tojson }}'
+                        data-values='{{ service_values|tojson }}'>
+                    </canvas>
+                </div>
+            </div>
+
+        </section>
+
+        <section class="admin-analytics-grid">
+
+            <div class="fin-panel">
+                <div class="panel-header">
+                    <div>
+                        <h3>Funding Overview</h3>
+                        <p>Funding request status summary.</p>
+                    </div>
+                    <span class="service-page-icon">💳</span>
+                </div>
+
+                <div class="admin-status-grid">
+                    <div>
+                        <span>Pending</span>
+                        <strong>{{ pending_count }}</strong>
+                    </div>
+                    <div>
+                        <span>Approved</span>
+                        <strong>{{ approved_count }}</strong>
+                    </div>
+                    <div>
+                        <span>Rejected</span>
+                        <strong>{{ rejected_count }}</strong>
+                    </div>
+                    <div>
+                        <span>Successful Volume</span>
+                        <strong>₦{{ "%.2f"|format(total_successful_amount) }}</strong>
+                    </div>
+                </div>
+            </div>
+
+            <div class="fin-panel admin-insight-card">
+                <span class="insight-badge">Admin Insight</span>
+                <h3>System activity is being tracked.</h3>
+                <p>
+                    CHILILI currently has {{ total_users }} user account(s),
+                    {{ total_transactions }} transaction record(s), and
+                    {{ pending_count }} funding request(s) awaiting review.
+                </p>
+            </div>
+
+        </section>
+
+        <section class="admin-tables-grid">
+
+            <div class="fin-panel">
+                <div class="panel-header">
+                    <div>
+                        <h3>Recent Funding Requests</h3>
+                        <p>Latest wallet funding submissions.</p>
+                    </div>
+                    <a href="{{ url_for('admin_funding') }}">View all</a>
+                </div>
+
+                {% if recent_funding_requests %}
+                    {% for req in recent_funding_requests %}
+                    <div class="admin-list-row">
+                        <div>
+                            <strong>{{ req.user.full_name }}</strong>
+                            <small>{{ req.proof_text }}</small>
+                        </div>
+                        <span>₦{{ "%.2f"|format(req.amount) }}</span>
+                        <b class="tx-status">{{ req.status }}</b>
+                    </div>
+                    {% endfor %}
+                {% else %}
+                    <p class="empty-state">No funding requests yet.</p>
+                {% endif %}
+            </div>
+
+            <div class="fin-panel">
+                <div class="panel-header">
+                    <div>
+                        <h3>Recent Users</h3>
+                        <p>Newest registered accounts.</p>
+                    </div>
+                    <span class="service-page-icon">👥</span>
+                </div>
+
+                {% if recent_users %}
+                    {% for account in recent_users %}
+                    <div class="admin-list-row">
+                        <div>
+                            <strong>{{ account.full_name }}</strong>
+                            <small>{{ account.email }}</small>
+                        </div>
+                        <span>{{ account.role }}</span>
+                    </div>
+                    {% endfor %}
+                {% else %}
+                    <p class="empty-state">No users found.</p>
+                {% endif %}
+            </div>
+
+        </section>
+
+    </main>
+
+</section>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="{{ url_for('static', filename='js/admin_charts.js') }}"></script>
+{% endblock %}

@@ -1,0 +1,180 @@
+{% extends "base.html" %}
+
+{% block content %}
+<section class="dashboard-page fintech-dashboard">
+
+    <aside class="fin-sidebar">
+        <div>
+            <div class="fin-logo-row">
+                <div class="fin-logo-icon">C</div>
+                <div>
+                    <h2>CHILILI</h2>
+                    <p>Transaction Center</p>
+                </div>
+            </div>
+
+            <nav class="fin-menu">
+                <a href="{{ url_for('dashboard') }}">🏠 <span>Dashboard</span></a>
+                <a href="{{ url_for('buy_airtime') }}">📱 <span>Airtime</span></a>
+                <a href="{{ url_for('buy_data') }}">📶 <span>Data</span></a>
+                <a href="{{ url_for('pay_electricity') }}">⚡ <span>Electricity</span></a>
+                <a href="{{ url_for('pay_tv') }}">📺 <span>TV Bills</span></a>
+                <a href="{{ url_for('fund_wallet') }}">💳 <span>Fund Wallet</span></a>
+                <a class="active" href="{{ url_for('transactions') }}">📜 <span>Transactions</span></a>
+                <a href="{{ url_for('profile') }}">👤 <span>My Account</span></a>
+            </nav>
+        </div>
+
+        <a class="fin-logout" href="{{ url_for('logout') }}">🚪 <span>Logout</span></a>
+    </aside>
+
+    <main class="fin-main">
+
+        <header class="fin-topbar premium-header">
+            <div class="header-left">
+                <span class="page-kicker">Transaction Center</span>
+                <h1>Transaction History 📜</h1>
+                <p>Search, filter, and review all wallet and bill payment records.</p>
+            </div>
+
+            <div class="fin-user-actions">
+                <div class="fin-profile-chip premium-profile">
+                    <div class="avatar-dot">👤</div>
+                    <div>
+                        <strong>{{ user.full_name }}</strong>
+                        <small>{{ user.email }}</small>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <section class="fin-panel transaction-page-card">
+
+            <div class="panel-header">
+
+    <div>
+        <h3>All Transactions</h3>
+        <p>Use the filters below to find specific records quickly.</p>
+    </div>
+
+    <a href="{{ url_for('export_transactions') }}"
+       class="export-btn">
+        📥 Export CSV
+    </a>
+
+</div>
+
+            <form method="GET" action="{{ url_for('transactions') }}" class="transaction-filter-form">
+
+                <div class="filter-input">
+                    <label>Search</label>
+                    <input
+                        type="text"
+                        name="search"
+                        value="{{ search }}"
+                        placeholder="Reference, service, provider, meter, phone...">
+                </div>
+
+                <div class="filter-input">
+                    <label>Service</label>
+                    <select name="service">
+                        <option value="">All Services</option>
+                        <option value="Wallet Funding" {% if service == "Wallet Funding" %}selected{% endif %}>Wallet Funding</option>
+                        <option value="Airtime Purchase" {% if service == "Airtime Purchase" %}selected{% endif %}>Airtime Purchase</option>
+                        <option value="Data Purchase" {% if service == "Data Purchase" %}selected{% endif %}>Data Purchase</option>
+                        <option value="Electricity Payment" {% if service == "Electricity Payment" %}selected{% endif %}>Electricity Payment</option>
+                        <option value="TV Subscription" {% if service == "TV Subscription" %}selected{% endif %}>TV Subscription</option>
+                    </select>
+                </div>
+
+                <div class="filter-input">
+                    <label>Status</label>
+                    <select name="status">
+                        <option value="">All Status</option>
+                        <option value="successful" {% if status == "successful" %}selected{% endif %}>Successful</option>
+                        <option value="pending" {% if status == "pending" %}selected{% endif %}>Pending</option>
+                        <option value="failed" {% if status == "failed" %}selected{% endif %}>Failed</option>
+                    </select>
+                </div>
+
+                <div class="filter-buttons">
+                    <button type="submit">Apply Filter</button>
+                    <a href="{{ url_for('transactions') }}">Reset</a>
+                </div>
+
+            </form>
+
+            {% if transactions.items %}
+
+            <div class="transaction-table-modern">
+                <div class="transaction-head">
+                    <span>Reference</span>
+                    <span>Service</span>
+                    <span>Provider</span>
+                    <span>Amount</span>
+                    <span>Status</span>
+                    <span>Date</span>
+                    <span>Receipt</span>
+                </div>
+
+                {% for txn in transactions.items %}
+                <div class="transaction-row-modern">
+                    <strong>{{ txn.reference }}</strong>
+
+                    <div class="tx-service-pill">
+                        <span>
+                            {% if txn.service_type == "Airtime Purchase" %}📱
+                            {% elif txn.service_type == "Data Purchase" %}📶
+                            {% elif txn.service_type == "Electricity Payment" %}⚡
+                            {% elif txn.service_type == "TV Subscription" %}📺
+                            {% elif txn.service_type == "Wallet Funding" %}💳
+                            {% else %}📜
+                            {% endif %}
+                        </span>
+                        <b>{{ txn.service_type }}</b>
+                    </div>
+
+                    <span>{{ txn.provider }}</span>
+                    <strong>₦{{ "%.2f"|format(txn.amount) }}</strong>
+
+                    <span class="tx-status">{{ txn.status }}</span>
+
+                    <span>{{ txn.created_at.strftime("%Y-%m-%d %H:%M") }}</span>
+
+                    <a class="receipt-link" href="{{ url_for('receipt', transaction_id=txn.id) }}">
+                        View Receipt
+                    </a>
+                </div>
+                {% endfor %}
+            </div>
+
+            <div class="pagination-wrap">
+                {% if transactions.has_prev %}
+                    <a href="{{ url_for('transactions', page=transactions.prev_num, search=search, service=service, status=status) }}">← Previous</a>
+                {% else %}
+                    <span class="disabled-page">← Previous</span>
+                {% endif %}
+
+                <strong>
+                    Page {{ transactions.page }} of {{ transactions.pages }}
+                </strong>
+
+                {% if transactions.has_next %}
+                    <a href="{{ url_for('transactions', page=transactions.next_num, search=search, service=service, status=status) }}">Next →</a>
+                {% else %}
+                    <span class="disabled-page">Next →</span>
+                {% endif %}
+            </div>
+
+            {% else %}
+
+                <p class="empty-state">No transaction found for the selected filter.</p>
+
+            {% endif %}
+
+        </section>
+
+    </main>
+
+</section>
+{% endblock %}

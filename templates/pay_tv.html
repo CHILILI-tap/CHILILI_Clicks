@@ -1,0 +1,160 @@
+{% extends "base.html" %}
+
+{% block content %}
+<section class="dashboard-page fintech-dashboard">
+
+    <aside class="fin-sidebar">
+        <div>
+            <div class="fin-logo-row">
+                <div class="fin-logo-icon">C</div>
+                <div>
+                    <h2>CHILILI</h2>
+                    <p>Clicks Wallet</p>
+                </div>
+            </div>
+
+            <nav class="fin-menu">
+                <a href="{{ url_for('dashboard') }}">🏠 <span>Dashboard</span></a>
+                <a href="{{ url_for('buy_airtime') }}">📱 <span>Airtime</span></a>
+                <a href="{{ url_for('buy_data') }}">📶 <span>Data</span></a>
+                <a href="{{ url_for('pay_electricity') }}">⚡ <span>Electricity</span></a>
+                <a class="active" href="{{ url_for('pay_tv') }}">📺 <span>TV Bills</span></a>
+                <a href="{{ url_for('fund_wallet') }}">💳 <span>Fund Wallet</span></a>
+                <a href="{{ url_for('transactions') }}">📜 <span>Transactions</span></a>
+                <a href="{{ url_for('profile') }}">👤 <span>My Account</span></a>
+            </nav>
+        </div>
+
+        <a class="fin-logout" href="{{ url_for('logout') }}">🚪 <span>Logout</span></a>
+    </aside>
+
+    <main class="fin-main">
+
+        <header class="fin-topbar premium-header">
+            <div class="header-left">
+                <span class="page-kicker">Entertainment</span>
+                <h1>TV Subscription 📺</h1>
+                <p>Renew DSTV, GOtv and StarTimes subscriptions instantly.</p>
+            </div>
+
+            <div class="fin-user-actions">
+                <div class="fin-profile-chip premium-profile">
+                    <div class="avatar-dot">👤</div>
+                    <div>
+                        <strong>{{ user.full_name }}</strong>
+                        <small>₦{{ "%.2f"|format(user.wallet_balance) }}</small>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <section class="service-page-grid">
+
+            <div class="fin-panel service-form-card">
+
+                <div class="panel-header">
+                    <div>
+                        <h3>TV Subscription</h3>
+                        <p>Choose your provider and subscription package.</p>
+                    </div>
+
+                    <span class="service-page-icon">📺</span>
+                </div>
+
+                <form method="POST" class="pro-form">
+
+                    <div class="pro-input-box">
+                        <span>📺</span>
+                        <div>
+                            <label>TV Provider</label>
+
+                            <select name="provider" required>
+                                <option value="">Select provider</option>
+                                <option>DSTV</option>
+                                <option>GOtv</option>
+                                <option>StarTimes</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="pro-input-box">
+                        <span>📦</span>
+                        <div>
+                            <label>Subscription Plan</label>
+
+                            <select name="plan" required>
+                                <option value="">Select plan</option>
+
+                                <option>DSTV Padi - ₦2500</option>
+                                <option>DSTV Yanga - ₦3500</option>
+                                <option>GOtv Jolli - ₦3300</option>
+                                <option>GOtv Max - ₦4850</option>
+                                <option>StarTimes Basic - ₦2200</option>
+                                <option>StarTimes Classic - ₦3200</option>
+
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="pro-input-box">
+                        <span>🔢</span>
+                        <div>
+                            <label>Smartcard / IUC Number</label>
+
+                            <input
+                                type="text"
+                                name="smartcard_number"
+                                placeholder="Enter Smartcard Number"
+                                required>
+                        </div>
+                    </div>
+
+                    <button class="pro-submit-btn">
+                        Pay TV Subscription →
+                    </button>
+
+                </form>
+
+            </div>
+
+            <aside class="fin-panel service-summary-card">
+
+                <h3>Payment Summary</h3>
+
+                <div class="summary-big-balance">
+                    <span>Wallet Balance</span>
+
+                    <strong>
+                        ₦{{ "%.2f"|format(user.wallet_balance) }}
+                    </strong>
+                </div>
+
+                <div class="system-row">
+                    <span>Provider</span>
+                    <strong>DSTV / GOtv / StarTimes</strong>
+                </div>
+
+                <div class="system-row">
+                    <span>Payment Mode</span>
+                    <strong>Demo</strong>
+                </div>
+
+                <div class="system-row">
+                    <span>Status</span>
+                    <strong>Ready</strong>
+                </div>
+
+                <div class="system-note">
+                    Your wallet will be charged immediately after payment.
+                    A successful transaction will automatically be recorded
+                    in your transaction history.
+                </div>
+
+            </aside>
+
+        </section>
+
+    </main>
+
+</section>
+{% endblock %}

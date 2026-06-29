@@ -1,0 +1,97 @@
+{% extends "base.html" %}
+
+{% block content %}
+<section class="auth-page">
+
+    <div class="auth-left">
+        <div class="logo-box">
+            <div class="logo-icon">C</div>
+            <div>
+                <h2>CHILILI Clicks</h2>
+                <p>Smart bills. Fast payments.</p>
+            </div>
+        </div>
+
+        <span class="pill">🔐 Secure User Access</span>
+
+        <div class="hero-content">
+            <h1>Welcome Back.<br><span>Manage Payments Smarter.</span></h1>
+            <p>
+                Access your CHILILI Clicks wallet, monitor transaction history,
+                fund your account, and continue paying airtime, data, electricity,
+                and TV subscription bills from one secure dashboard.
+            </p>
+        </div>
+
+        <div class="service-grid">
+            <div class="service-card">💼<h4>Wallet</h4><p>Manage balance</p></div>
+            <div class="service-card">📜<h4>History</h4><p>Track payments</p></div>
+            <div class="service-card">⚡<h4>Fast Bills</h4><p>Pay quickly</p></div>
+            <div class="service-card">🛡<h4>Protected</h4><p>Secure access</p></div>
+        </div>
+
+        <div class="wallet-box">
+            <div>
+                <p>Account Access</p>
+                <h3>Login</h3>
+                <small>Continue from where you stopped.</small>
+            </div>
+            <span>● Secure</span>
+        </div>
+
+        <div class="trust-row">
+            <span>🛡 Secure Login</span>
+            <span>🔒 Password Protected</span>
+            <span>✅ Verified Account</span>
+        </div>
+    </div>
+
+    <div class="auth-right">
+        <div class="auth-card">
+
+            <div class="secure-badge">🔐 Account Login</div>
+
+            <h1>Login to CHILILI</h1>
+            <p class="subtitle">
+                Enter your registered email and password to access your wallet.
+            </p>
+
+            <form method="POST">
+                <div class="input-box">
+                    <span>✉️</span>
+                    <div>
+                        <label>Email Address</label>
+                        <input type="email" name="email" placeholder="example@email.com" required>
+                    </div>
+                </div>
+
+                <div class="input-box">
+                    <span>🔐</span>
+                    <div>
+                        <label>Password</label>
+                        <input type="password" name="password" placeholder="Enter password" required>
+                    </div>
+                </div>
+
+                <label class="robot-check">
+                    <input type="checkbox" name="not_robot" required>
+                    <span>I am not a robot</span>
+                </label>
+
+                <div class="security-note">
+                    🛡 <strong>Protected login session.</strong><br>
+                    <small>Your login is handled through a secure session-based system.</small>
+                </div>
+
+                <button type="submit" class="btn-primary">Login to Dashboard →</button>
+            </form>
+
+            <p class="auth-link">
+                New to CHILILI Clicks?
+                <a href="{{ url_for('register') }}">Create account</a>
+            </p>
+        </div>
+    </div>
+
+</section>
+{% endblock %}

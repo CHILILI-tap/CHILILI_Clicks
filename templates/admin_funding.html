@@ -1,0 +1,210 @@
+{% extends "base.html" %}
+
+{% block content %}
+<section class="dashboard-page fintech-dashboard">
+
+    <aside class="fin-sidebar">
+        <div>
+
+            <div class="fin-logo-row">
+                <div class="fin-logo-icon">A</div>
+
+                <div>
+                    <h2>ADMIN</h2>
+                    <p>CHILILI Control</p>
+                </div>
+            </div>
+
+            <nav class="fin-menu">
+                <a href="{{ url_for('admin_dashboard') }}">
+                    🏠 <span>Dashboard</span>
+                </a>
+
+                <a class="active" href="{{ url_for('admin_funding') }}">
+                    💳 <span>Funding Requests</span>
+                </a>
+            </nav>
+
+        </div>
+
+        <a href="{{ url_for('logout') }}" class="fin-logout">
+            🚪 <span>Logout</span>
+        </a>
+
+    </aside>
+
+
+    <main class="fin-main">
+
+        <header class="fin-topbar premium-header">
+
+            <div class="header-left">
+                <span class="page-kicker">
+                    Wallet Administration
+                </span>
+
+                <h1>Funding Requests 💳</h1>
+
+                <p>
+                    Review user funding requests and approve or reject them.
+                </p>
+            </div>
+
+            <div class="fin-user-actions">
+
+                <div class="notification-bell">
+                    🔔
+                    <span>{{ requests|length }}</span>
+                </div>
+
+                <div class="fin-profile-chip premium-profile">
+
+                    <div class="avatar-dot">
+                        🛡️
+                    </div>
+
+                    <div>
+                        <strong>Administrator</strong>
+                        <small>CHILILI Control</small>
+                    </div>
+
+                </div>
+
+            </div>
+
+        </header>
+
+
+        <section class="fin-panel">
+
+            <div class="panel-header">
+
+                <div>
+                    <h3>Pending Funding Requests</h3>
+
+                    <p>
+                        Approve wallet funding submitted by users.
+                    </p>
+                </div>
+
+                <span class="service-page-icon">
+                    💰
+                </span>
+
+            </div>
+
+            {% if requests %}
+
+            <div class="table-wrapper">
+
+                <table class="transaction-table">
+
+                    <thead>
+
+                        <tr>
+
+                            <th>User</th>
+                            <th>Amount</th>
+                            <th>Proof</th>
+                            <th>Status</th>
+                            <th>Actions</th>
+
+                        </tr>
+
+                    </thead>
+
+                    <tbody>
+
+                        {% for req in requests %}
+
+                        <tr>
+
+                            <td>
+                                <strong>{{ req.user.full_name }}</strong>
+                            </td>
+
+                            <td>
+                                ₦{{ "%.2f"|format(req.amount) }}
+                            </td>
+
+                            <td>
+                                {{ req.proof_text }}
+                            </td>
+
+                            <td>
+
+                                {% if req.status=="pending" %}
+
+                                    <span class="status-badge pending">
+                                        Pending
+                                    </span>
+
+                                {% elif req.status=="approved" %}
+
+                                    <span class="status-badge success">
+                                        Approved
+                                    </span>
+
+                                {% else %}
+
+                                    <span class="status-badge failed">
+                                        Rejected
+                                    </span>
+
+                                {% endif %}
+
+                            </td>
+
+                            <td>
+
+                                <div class="action-buttons">
+
+                                    <a class="approve-btn"
+                                       href="{{ url_for('approve_funding', request_id=req.id) }}">
+                                        ✔ Approve
+                                    </a>
+
+                                    <a class="reject-btn"
+                                       href="{{ url_for('reject_funding', request_id=req.id) }}">
+                                        ✖ Reject
+                                    </a>
+
+                                </div>
+
+                            </td>
+
+                        </tr>
+
+                        {% endfor %}
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+            {% else %}
+
+            <div class="empty-admin">
+
+                <div class="empty-icon">
+                    ✅
+                </div>
+
+                <h2>No Pending Requests</h2>
+
+                <p>
+                    All wallet funding requests have been processed.
+                </p>
+
+            </div>
+
+            {% endif %}
+
+        </section>
+
+    </main>
+
+</section>
+
+{% endblock %}

@@ -1,0 +1,106 @@
+{% extends "base.html" %}
+
+{% block content %}
+<section class="dashboard-page fintech-dashboard">
+
+    <aside class="fin-sidebar">
+        <div>
+            <div class="fin-logo-row">
+                <div class="fin-logo-icon">C</div>
+                <div>
+                    <h2>CHILILI</h2>
+                    <p>Clicks Receipt</p>
+                </div>
+            </div>
+
+            <nav class="fin-menu">
+                <a href="{{ url_for('dashboard') }}">🏠 <span>Dashboard</span></a>
+                <a href="{{ url_for('transactions') }}">📜 <span>Transactions</span></a>
+                <a href="{{ url_for('profile') }}">👤 <span>My Account</span></a>
+            </nav>
+        </div>
+
+        <a class="fin-logout" href="{{ url_for('logout') }}">🚪 <span>Logout</span></a>
+    </aside>
+
+    <main class="fin-main">
+
+        <header class="fin-topbar premium-header">
+            <div class="header-left">
+                <span class="page-kicker">Payment confirmation</span>
+                <h1>Transaction Receipt 🧾</h1>
+                <p>Your CHILILI Clicks transaction confirmation details.</p>
+            </div>
+        </header>
+
+        <section class="receipt-page-wrap">
+            <div class="fin-panel receipt-card-pro">
+
+                <div class="receipt-top">
+                    <div class="receipt-brand">
+                        <div class="fin-logo-icon">C</div>
+                        <div>
+                            <h2>CHILILI Clicks Receipt</h2>
+                            <p>Official transaction confirmation</p>
+                        </div>
+                    </div>
+
+                    <span class="receipt-status">{{ txn.status }}</span>
+                </div>
+
+                <div class="receipt-amount-box">
+                    <span>Amount Paid</span>
+                    <strong>₦{{ "%.2f"|format(txn.amount) }}</strong>
+                </div>
+
+                <div class="receipt-details-grid">
+                    <div class="receipt-row">
+                        <span>Reference</span>
+                        <strong>{{ txn.reference }}</strong>
+                    </div>
+
+                    <div class="receipt-row">
+                        <span>Service</span>
+                        <strong>{{ txn.service_type }}</strong>
+                    </div>
+
+                    <div class="receipt-row">
+                        <span>Provider</span>
+                        <strong>{{ txn.provider }}</strong>
+                    </div>
+
+                    <div class="receipt-row">
+                        <span>Receiver / Meter / Card</span>
+                        <strong>{{ txn.phone_or_meter }}</strong>
+                    </div>
+
+                    <div class="receipt-row">
+                        <span>Status</span>
+                        <strong>{{ txn.status }}</strong>
+                    </div>
+
+                    <div class="receipt-row">
+                        <span>Date</span>
+                        <strong>{{ txn.created_at.strftime("%Y-%m-%d %H:%M") }}</strong>
+                    </div>
+                </div>
+
+                <div class="receipt-note">
+                    This receipt confirms that the transaction above was recorded successfully on CHILILI Clicks.
+                </div>
+
+                <div class="receipt-actions">
+                    <button onclick="window.print()" class="pro-submit-btn">Print Receipt</button>
+
+                    <a href="{{ url_for('transactions') }}" class="receipt-back-btn">
+                        Back to Transactions
+                    </a>
+                </div>
+
+            </div>
+        </section>
+
+    </main>
+
+</section>
+{% endblock %}

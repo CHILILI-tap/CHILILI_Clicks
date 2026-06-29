@@ -1,0 +1,112 @@
+{% extends "base.html" %}
+
+{% block content %}
+<section class="dashboard-page fintech-dashboard">
+
+    <aside class="fin-sidebar">
+        <div>
+            <div class="fin-logo-row">
+                <div class="fin-logo-icon">C</div>
+                <div>
+                    <h2>CHILILI</h2>
+                    <p>Notification Center</p>
+                </div>
+            </div>
+
+            <nav class="fin-menu">
+                <a href="{{ url_for('dashboard') }}">🏠 <span>Dashboard</span></a>
+                <a class="active" href="{{ url_for('notifications') }}">🔔 <span>Notifications</span></a>
+                <a href="{{ url_for('transactions') }}">📜 <span>Transactions</span></a>
+                <a href="{{ url_for('profile') }}">👤 <span>My Account</span></a>
+            </nav>
+        </div>
+
+        <a class="fin-logout" href="{{ url_for('logout') }}">🚪 <span>Logout</span></a>
+    </aside>
+
+    <main class="fin-main">
+
+        <header class="fin-topbar premium-header">
+            <div class="header-left">
+                <span class="page-kicker">Notification Center</span>
+                <h1>Notifications 🔔</h1>
+                <p>Review wallet alerts, payment confirmations, and security updates.</p>
+            </div>
+
+            <div class="fin-user-actions">
+                <div class="notification-bell">🔔<span>{{ unread_count }}</span></div>
+                <div class="fin-profile-chip premium-profile">
+                    <div class="avatar-dot">👤</div>
+                    <div>
+                        <strong>{{ user.full_name }}</strong>
+                        <small>{{ user.email }}</small>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <section class="fin-panel notification-center-card">
+            <div class="panel-header">
+                <div>
+                    <h3>Recent Alerts</h3>
+                    <p>You have {{ unread_count }} unread notification(s).</p>
+                </div>
+                <span class="service-page-icon">🔔</span>
+            </div>
+
+            {% if notifications %}
+                <div class="notification-list">
+                    {% for note in notifications %}
+                    <div class="notification-item {% if not note.is_read %}unread{% endif %}">
+                        <div class="notification-icon">
+                            {% if "Funding" in note.title %}💳
+                            {% elif "Password" in note.title %}🔐
+                            {% elif "Airtime" in note.title %}📱
+                            {% elif "Data" in note.title %}📶
+                            {% elif "Electricity" in note.title %}⚡
+                            {% elif "TV" in note.title %}📺
+                            {% else %}🔔
+                            {% endif %}
+                        </div>
+
+                        <div class="notification-body">
+                            <div class="notification-title-row">
+                                <strong>{{ note.title }}</strong>
+                                {% if not note.is_read %}
+                                    <span class="unread-dot">Unread</span>
+                                {% else %}
+                                    <span class="read-dot">Read</span>
+                                {% endif %}
+                            </div>
+
+                            <p>{{ note.message }}</p>
+                            <small>{{ note.created_at.strftime("%Y-%m-%d %H:%M") }}</small>
+                        </div>
+
+                        <div class="notification-actions">
+                            {% if not note.is_read %}
+                            <a href="{{ url_for('read_notification', id=note.id) }}" class="mark-read-btn">
+                                Mark Read
+                            </a>
+                            {% endif %}
+
+                            <a href="{{ url_for('delete_notification', id=note.id) }}" class="delete-note-btn">
+                                Delete
+                            </a>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            {% else %}
+                <div class="empty-admin">
+                    <div class="empty-icon">🔔</div>
+                    <h2>No Notifications Yet</h2>
+                    <p>Your wallet alerts and payment confirmations will appear here.</p>
+                </div>
+            {% endif %}
+        </section>
+
+    </main>
+
+</section>
+{% endblock %}
