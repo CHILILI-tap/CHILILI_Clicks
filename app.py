@@ -40,7 +40,7 @@ def generate_reference(prefix="CHL"):
 
 @app.route("/")
 def index():
-    return render_template("index.html")
+    return redirect(url_for("login"))
 
 
 @app.route("/register", methods=["GET", "POST"])
