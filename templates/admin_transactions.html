@@ -1,201 +1,126 @@
 {% extends "base.html" %}
 
 {% block content %}
+<section class="dashboard-page fintech-dashboard">
 
-<section class="dashboard-page">
-
-    <aside class="sidebar">
-
+    <aside class="fin-sidebar">
         <div>
-
-            <div class="side-logo">
-                <div class="logo-icon">A</div>
+            <div class="fin-logo-row">
+                <div class="fin-logo-icon">A</div>
                 <div>
                     <h2>ADMIN</h2>
                     <p>Transaction Center</p>
                 </div>
             </div>
 
-            <nav class="side-menu">
-                <a href="{{ url_for('admin_dashboard') }}">🏠 Dashboard</a>
-                <a href="{{ url_for('admin_funding') }}">💳 Funding Requests</a>
-                <a class="active" href="{{ url_for('admin_transactions') }}">📜 Transactions</a>
-                <a href="{{ url_for('logout') }}">🚪 Logout</a>
+            <nav class="fin-menu">
+                <a href="{{ url_for('admin_dashboard') }}">🏠 <span>Dashboard</span></a>
+                <a href="{{ url_for('admin_funding') }}">💳 <span>Funding Requests</span></a>
+                <a class="active" href="{{ url_for('admin_transactions') }}">📜 <span>Transactions</span></a>
+                <a href="{{ url_for('admin_users') }}">👥 <span>Users</span></a>
+                <a href="{{ url_for('dashboard') }}">👤 <span>User Dashboard</span></a>
             </nav>
-
         </div>
 
+        <a class="fin-logout" href="{{ url_for('logout') }}">🚪 <span>Logout</span></a>
     </aside>
 
-    <main class="dashboard-main">
+    <main class="fin-main">
 
-        <div class="topbar">
-
-            <div>
-                <h1>All Transactions</h1>
+        <header class="fin-topbar premium-header">
+            <div class="header-left">
+                <span class="page-kicker">Admin Transaction Center</span>
+                <h1>All Transactions 📜</h1>
                 <p>Monitor every transaction performed in the system.</p>
             </div>
 
-            <div class="profile-pill">
-                <span>👤</span>
+            <div class="fin-profile-chip premium-profile">
+                <div class="avatar-dot">👤</div>
                 <div>
                     <strong>{{ user.full_name }}</strong>
                     <small>Administrator</small>
                 </div>
             </div>
+        </header>
 
-        </div>
+        <section class="fin-panel transaction-page-card">
+            <div class="panel-header">
+                <div>
+                    <h3>Transaction Records</h3>
+                    <p>Search, filter, export, and review all transaction records.</p>
+                </div>
 
-        <div class="panel-header">
+                <a href="{{ url_for('export_transactions') }}" class="export-btn">
+                    📥 Export CSV
+                </a>
+            </div>
 
-    <div>
-        <h3>Transaction Records</h3>
-        <p>Monitor every transaction in the system.</p>
-    </div>
+            <form method="GET" class="transaction-filter-form">
+                <div class="filter-input">
+                    <label>Search</label>
+                    <input type="text" name="search" value="{{ search }}" placeholder="Reference, service, provider...">
+                </div>
 
-    <a href="{{ url_for('export_transactions') }}"
-       class="export-btn">
-        📥 Export CSV
-    </a>
+                <div class="filter-input">
+                    <label>Service</label>
+                    <select name="service">
+                        <option value="">All Services</option>
+                        <option value="Wallet Funding" {% if service=="Wallet Funding" %}selected{% endif %}>Wallet Funding</option>
+                        <option value="Airtime Purchase" {% if service=="Airtime Purchase" %}selected{% endif %}>Airtime</option>
+                        <option value="Data Purchase" {% if service=="Data Purchase" %}selected{% endif %}>Data</option>
+                        <option value="Electricity Payment" {% if service=="Electricity Payment" %}selected{% endif %}>Electricity</option>
+                        <option value="TV Subscription" {% if service=="TV Subscription" %}selected{% endif %}>TV</option>
+                    </select>
+                </div>
 
-</div>
+                <div class="filter-input">
+                    <label>Status</label>
+                    <select name="status">
+                        <option value="">All Status</option>
+                        <option value="successful" {% if status=="successful" %}selected{% endif %}>Successful</option>
+                        <option value="pending" {% if status=="pending" %}selected{% endif %}>Pending</option>
+                        <option value="failed" {% if status=="failed" %}selected{% endif %}>Failed</option>
+                    </select>
+                </div>
 
-            <h2>Transaction Records</h2>
-
-            <form method="GET" style="margin:20px 0;display:flex;gap:10px;flex-wrap:wrap;">
-
-                <input
-                    type="text"
-                    name="search"
-                    value="{{ search }}"
-                    placeholder="Search..."
-                    class="form-control">
-
-                <select name="service" class="form-control">
-
-                    <option value="">All Services</option>
-
-                    <option value="Airtime Purchase"
-                        {% if service=="Airtime Purchase" %}selected{% endif %}>
-                        Airtime
-                    </option>
-
-                    <option value="Data Purchase"
-                        {% if service=="Data Purchase" %}selected{% endif %}>
-                        Data
-                    </option>
-
-                    <option value="Electricity Payment"
-                        {% if service=="Electricity Payment" %}selected{% endif %}>
-                        Electricity
-                    </option>
-
-                    <option value="TV Subscription"
-                        {% if service=="TV Subscription" %}selected{% endif %}>
-                        TV
-                    </option>
-
-                    <option value="Wallet Funding"
-                        {% if service=="Wallet Funding" %}selected{% endif %}>
-                        Wallet Funding
-                    </option>
-
-                </select>
-
-                <select name="status" class="form-control">
-
-                    <option value="">All Status</option>
-
-                    <option value="successful"
-                        {% if status=="successful" %}selected{% endif %}>
-                        Successful
-                    </option>
-
-                    <option value="pending"
-                        {% if status=="pending" %}selected{% endif %}>
-                        Pending
-                    </option>
-
-                    <option value="failed"
-                        {% if status=="failed" %}selected{% endif %}>
-                        Failed
-                    </option>
-
-                </select>
-
-                <button class="btn-primary">
-                    Search
-                </button>
-
+                <div class="filter-buttons">
+                    <button type="submit">Search</button>
+                    <a href="{{ url_for('admin_transactions') }}">Reset</a>
+                </div>
             </form>
 
             {% if transactions.items %}
-
-            <table class="transaction-table">
-
-                <thead>
-
-                    <tr>
-                        <th>Reference</th>
-                        <th>User</th>
-                        <th>Service</th>
-                        <th>Provider</th>
-                        <th>Amount</th>
-                        <th>Status</th>
-                        <th>Date</th>
-                        <th>Receipt</th>
-                    </tr>
-
-                </thead>
-
-                <tbody>
+            <div class="transaction-table-modern">
+                <div class="transaction-head admin-tx-head">
+                    <span>Reference</span>
+                    <span>User</span>
+                    <span>Service</span>
+                    <span>Provider</span>
+                    <span>Amount</span>
+                    <span>Status</span>
+                    <span>Date</span>
+                    <span>Receipt</span>
+                </div>
 
                 {% for txn in transactions.items %}
-
-                    <tr>
-
-                        <td>{{ txn.reference }}</td>
-
-                        <td>{{ txn.user.full_name }}</td>
-
-                        <td>{{ txn.service_type }}</td>
-
-                        <td>{{ txn.provider }}</td>
-
-                        <td>₦{{ "%.2f"|format(txn.amount) }}</td>
-
-                        <td>{{ txn.status }}</td>
-
-                        <td>{{ txn.created_at.strftime("%Y-%m-%d %H:%M") }}</td>
-
-                        <td>
-                            <a href="{{ url_for('receipt', transaction_id=txn.id) }}"
-                               class="btn-primary"
-                               style="padding:6px 12px;text-decoration:none;">
-                                View
-                            </a>
-                        </td>
-
-                    </tr>
-
+                <div class="transaction-row-modern admin-tx-row">
+                    <span>{{ txn.reference }}</span>
+                    <strong>{{ txn.user.full_name }}</strong>
+                    <span>{{ txn.service_type }}</span>
+                    <span>{{ txn.provider }}</span>
+                    <strong>₦{{ "%.2f"|format(txn.amount) }}</strong>
+                    <span class="tx-status">{{ txn.status }}</span>
+                    <span>{{ txn.created_at.strftime("%Y-%m-%d %H:%M") }}</span>
+                    <a href="{{ url_for('receipt', transaction_id=txn.id) }}" class="mini-action-btn">View</a>
+                </div>
                 {% endfor %}
-
-                </tbody>
-
-            </table>
-
+            </div>
             {% else %}
-
-                <p class="empty-state">
-                    No transactions found.
-                </p>
-
+                <p class="empty-state">No transactions found.</p>
             {% endif %}
-
-        </div>
+        </section>
 
     </main>
 
 </section>
-
 {% endblock %}
