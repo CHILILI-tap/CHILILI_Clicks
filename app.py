@@ -1021,3 +1021,34 @@ def setup_admin():
     db.session.commit()
 
     return "Admin created successfully."    
+@app.route("/setup-users")
+def setup_users():
+    admin = User.query.filter_by(email="admin@chilili.com").first()
+
+    if not admin:
+        admin = User(
+            full_name="CHILILI Admin",
+            email="admin@chilili.com",
+            phone="08000000000",
+            password=generate_password_hash("admin123"),
+            wallet_balance=0.0,
+            role="admin"
+        )
+        db.session.add(admin)
+
+    test_user = User.query.filter_by(email="test@gmail.com").first()
+
+    if not test_user:
+        test_user = User(
+            full_name="Test User",
+            email="test@gmail.com",
+            phone="08012345678",
+            password=generate_password_hash("test123"),
+            wallet_balance=200000.0,
+            role="user"
+        )
+        db.session.add(test_user)
+
+    db.session.commit()
+
+    return "Admin and test user created successfully."
