@@ -290,3 +290,98 @@
     font-weight: 950;
     text-decoration: none;
 }
+/* ================================
+   MOBILE LOGIN RESPONSIVE FIX
+================================ */
+
+@media (max-width: 768px) {
+    body {
+        overflow-x: hidden;
+    }
+
+    .auth-page,
+    .login-page,
+    .auth-wrapper,
+    .login-wrapper {
+        display: block !important;
+        width: 100% !important;
+        min-height: 100vh;
+        padding: 20px !important;
+    }
+
+    .auth-left,
+    .login-left {
+        width: 100% !important;
+        padding: 20px 10px !important;
+        text-align: center;
+    }
+
+    .auth-left h1,
+    .login-left h1 {
+        font-size: 38px !important;
+        line-height: 1.1 !important;
+    }
+
+    .auth-left p,
+    .login-left p {
+        font-size: 16px !important;
+        line-height: 1.6 !important;
+    }
+
+    .auth-features,
+    .login-features,
+    .feature-grid {
+        grid-template-columns: 1fr 1fr !important;
+        gap: 12px !important;
+    }
+
+    .auth-card,
+    .login-card,
+    .auth-form-card {
+        width: 100% !important;
+        max-width: 100% !important;
+        margin: 20px 0 0 !important;
+        padding: 28px 20px !important;
+        border-radius: 28px !important;
+    }
+
+    .auth-card h1,
+    .login-card h1,
+    .auth-form-card h1 {
+        font-size: 34px !important;
+    }
+
+    .input-box,
+    .auth-input {
+        width: 100% !important;
+    }
+
+    .btn-primary,
+    .login-btn {
+        width: 100% !important;
+    }
+
+    .auth-status-card,
+    .security-box {
+        width: 100% !important;
+    }
+}
+
+@media (max-width: 480px) {
+    .auth-left h1,
+    .login-left h1 {
+        font-size: 32px !important;
+    }
+
+    .auth-features,
+    .login-features,
+    .feature-grid {
+        grid-template-columns: 1fr !important;
+    }
+
+    .auth-card,
+    .login-card,
+    .auth-form-card {
+        padding: 24px 16px !important;
+    }
+}
