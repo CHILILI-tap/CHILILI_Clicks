@@ -2253,3 +2253,104 @@ body {
     align-items:center;
     justify-content:center;
 }
+@media (max-width: 768px) {
+    .dashboard-page,
+    .fintech-dashboard {
+        display: block;
+        width: 100%;
+        overflow-x: hidden;
+    }
+
+    .fin-sidebar {
+        position: relative;
+        width: 100%;
+        height: auto;
+        padding: 18px;
+        border-radius: 0 0 28px 28px;
+    }
+
+    .fin-menu {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 10px;
+    }
+
+    .fin-main {
+        width: 100%;
+        padding: 18px;
+    }
+
+    .fin-topbar,
+    .premium-header {
+        display: block;
+        padding: 22px;
+    }
+
+    .header-center,
+    .dashboard-search {
+        width: 100%;
+        margin-top: 15px;
+    }
+
+    .fin-user-actions {
+        margin-top: 15px;
+        justify-content: space-between;
+    }
+
+    .fin-metrics-row,
+    .fin-content-grid,
+    .analytics-top-grid,
+    .admin-analytics-grid,
+    .admin-tables-grid,
+    .bottom-panels,
+    .dashboard-grid-main {
+        grid-template-columns: 1fr !important;
+    }
+
+    .fin-wallet-card,
+    .fin-stat-card,
+    .fin-panel,
+    .assistant-card {
+        width: 100%;
+    }
+
+    .fin-right-column {
+        width: 100%;
+    }
+
+    .assistant-card {
+        position: relative;
+        top: auto;
+        right: auto;
+        margin-top: 20px;
+    }
+
+    .assistant-floating-human {
+        display: none;
+    }
+
+    .transaction-table-modern,
+    .transaction-row-modern,
+    .transaction-head,
+    .tx-head,
+    .tx-row {
+        display: block;
+        width: 100%;
+    }
+
+    .tx-row,
+    .transaction-row-modern {
+        padding: 15px;
+        margin-bottom: 12px;
+        border-radius: 18px;
+        background: #fff;
+    }
+
+    h1 {
+        font-size: 30px !important;
+    }
+
+    h2 {
+        font-size: 26px !important;
+    }
+}
