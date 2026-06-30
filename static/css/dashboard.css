@@ -2354,3 +2354,62 @@ body {
         font-size: 26px !important;
     }
 }
+/* ================================
+   MOBILE SIDEBAR FIX
+================================ */
+
+@media (max-width: 768px) {
+    .fintech-dashboard {
+        display: block !important;
+    }
+
+    .fin-sidebar {
+        width: 100% !important;
+        min-height: auto !important;
+        height: auto !important;
+        position: relative !important;
+        padding: 18px !important;
+        border-radius: 0 0 28px 28px !important;
+    }
+
+    .fin-logo-row {
+        justify-content: center;
+        text-align: center;
+    }
+
+    .fin-menu {
+        display: grid !important;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 10px;
+        margin-top: 18px;
+    }
+
+    .fin-menu a {
+        padding: 13px 12px !important;
+        justify-content: center;
+        text-align: center;
+        font-size: 14px;
+    }
+
+    .fin-logout {
+        margin-top: 16px;
+        justify-content: center;
+        text-align: center;
+    }
+
+    .fin-main {
+        width: 100% !important;
+        margin-left: 0 !important;
+        padding: 18px !important;
+    }
+}
+
+@media (max-width: 480px) {
+    .fin-menu {
+        grid-template-columns: 1fr;
+    }
+
+    .fin-logo-row {
+        flex-direction: column;
+    }
+}
