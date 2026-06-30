@@ -1000,3 +1000,24 @@ with app.app_context():
 
 if __name__ == "__main__":
     app.run(debug=True)
+
+@app.route("/setup-admin")
+def setup_admin():
+    existing_admin = User.query.filter_by(email="admin@chilili.com").first()
+
+    if existing_admin:
+        return "Admin already exists."
+
+    admin = User(
+        full_name="CHILILI Admin",
+        email="admin@chilili.com",
+        phone="08000000000",
+        password=generate_password_hash("admin123"),
+        wallet_balance=0.0,
+        role="admin"
+    )
+
+    db.session.add(admin)
+    db.session.commit()
+
+    return "Admin created successfully."    
