@@ -2413,3 +2413,89 @@ body {
         flex-direction: column;
     }
 }
+
+/* FORCE MOBILE DASHBOARD TO FIT SCREEN */
+@media (max-width: 768px) {
+    html,
+    body {
+        width: 100% !important;
+        max-width: 100% !important;
+        overflow-x: hidden !important;
+    }
+
+    .dashboard-page,
+    .fintech-dashboard {
+        display: flex !important;
+        flex-direction: column !important;
+        width: 100vw !important;
+        max-width: 100vw !important;
+        min-width: 0 !important;
+        overflow-x: hidden !important;
+    }
+
+    .fin-sidebar {
+        position: static !important;
+        width: 100vw !important;
+        max-width: 100vw !important;
+        min-width: 0 !important;
+        height: auto !important;
+        min-height: auto !important;
+        padding: 16px !important;
+        border-radius: 0 0 24px 24px !important;
+        box-sizing: border-box !important;
+    }
+
+    .fin-main {
+        width: 100vw !important;
+        max-width: 100vw !important;
+        min-width: 0 !important;
+        margin: 0 !important;
+        padding: 16px !important;
+        box-sizing: border-box !important;
+        overflow-x: hidden !important;
+    }
+
+    .fin-topbar,
+    .premium-header,
+    .fin-metrics-row,
+    .admin-metrics-row,
+    .admin-analytics-grid,
+    .admin-tables-grid,
+    .fin-content-grid,
+    .fin-panel,
+    .fin-wallet-card,
+    .fin-stat-card {
+        width: 100% !important;
+        max-width: 100% !important;
+        box-sizing: border-box !important;
+    }
+
+    .fin-metrics-row,
+    .admin-metrics-row,
+    .admin-analytics-grid,
+    .admin-tables-grid,
+    .fin-content-grid {
+        display: grid !important;
+        grid-template-columns: 1fr !important;
+    }
+
+    .fin-menu {
+        display: grid !important;
+        grid-template-columns: 1fr 1fr !important;
+        gap: 10px !important;
+    }
+
+    .fin-menu a {
+        width: 100% !important;
+        justify-content: center !important;
+        font-size: 13px !important;
+        padding: 12px 8px !important;
+        box-sizing: border-box !important;
+    }
+}
+
+@media (max-width: 480px) {
+    .fin-menu {
+        grid-template-columns: 1fr !important;
+    }
+}
